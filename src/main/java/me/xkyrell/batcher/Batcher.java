@@ -92,6 +92,15 @@ public interface Batcher<K, V> extends AutoCloseable {
         Builder<K, V> removeListener(@Nullable BatchRemovalListener<K, V> onListener);
 
         /**
+         * Sets the flush policy.
+         *
+         * @param policy the flush policy
+         * @return this builder
+         * @since 1.0
+         */
+        Builder<K, V> flushPolicy(@NotNull BatchFlushPolicy policy);
+
+        /**
          * Sets the executor used for batch processing.
          *
          * @param executor the executor
