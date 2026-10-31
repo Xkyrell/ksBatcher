@@ -60,10 +60,18 @@ public interface Batcher<K, V> extends AutoCloseable {
     /**
      * Flushes all pending requests.
      *
-     * @return a future completed after processing
+     * @return a future containing the flush result
      * @since 1.0
      */
-    CompletableFuture<Void> flush();
+    CompletableFuture<FlushResult<K, V>> flush();
+
+    /**
+     * Flushes all pending requests.
+     *
+     * @return a future containing the flush result
+     * @since 1.0
+     */
+    CompletableFuture<FlushResult<K, V>> flushImmediately();
 
     /**
      * Closes the batcher and terminates all pending requests.
@@ -99,15 +107,6 @@ public interface Batcher<K, V> extends AutoCloseable {
          * @since 1.0
          */
         Builder<K, V> flushPolicy(@NotNull BatchFlushPolicy policy);
-
-        /**
-         * Sets the executor used for batch processing.
-         *
-         * @param executor the executor
-         * @return this builder
-         * @since 1.0
-         */
-        Builder<K, V> executor(@NotNull Executor executor);
 
         /**
          * Sets the maximum number of requests in a batch.
