@@ -1,9 +1,10 @@
 package me.xkyrell.batcher;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
@@ -25,7 +26,7 @@ public interface BatchLoader<K, V> {
      * @return a stage containing the loaded values
      * @since 1.0
      */
-    CompletionStage<Map<K, V>> load(@NotNull Set<K> keys);
+    CompletionStage<Map<K, V>> load(@NotNull List<K> keys);
 
     /**
      * Wraps a synchronous loader function.
@@ -35,7 +36,7 @@ public interface BatchLoader<K, V> {
      * @param <V> the request value type
      * @return a loader
      */
-    static <K, V> BatchLoader<K, V> wrap(@NotNull Function<Set<K>, Map<K, V>> onLoader) {
+    static <K, V> BatchLoader<K, V> wrap(@NotNull Function<List<K>, Map<K, V>> onLoader) {
         Objects.requireNonNull(onLoader, "onLoader cannot be null");
         return keys -> CompletableFuture.completedFuture(onLoader.apply(keys));
     }
