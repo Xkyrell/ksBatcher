@@ -91,13 +91,13 @@ public interface Batcher<K, V> extends AutoCloseable {
     interface Builder<K, V> {
 
         /**
-         * Sets the listener for removed requests.
+         * Sets the listener for completed requests.
          *
-         * @param onListener the removal listener
+         * @param onListener the completion listener
          * @return this builder
          * @since 1.0
          */
-        Builder<K, V> removeListener(@Nullable BatchRemovalListener<K, V> onListener);
+        Builder<K, V> completionListener(@Nullable BatchCompletionListener<K, V> onListener);
 
         /**
          * Sets the flush policy.
