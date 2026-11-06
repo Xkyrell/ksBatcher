@@ -24,32 +24,6 @@ public interface Batcher<K, V> extends AutoCloseable {
     CompletableFuture<V> add(@NotNull K key);
 
     /**
-     * Checks whether a request for the specified key is pending.
-     *
-     * @param key the request key
-     * @return {@code true} if the request is pending
-     * @since 1.0
-     */
-    boolean contains(@NotNull K key);
-
-    /**
-     * Removes the pending request for the specified key.
-     *
-     * @param key the request key
-     * @return {@code true} if the request was removed
-     * @since 1.0
-     */
-    boolean remove(@NotNull K key);
-
-    /**
-     * Removes all pending requests.
-     *
-     * @return the number of removed requests
-     * @since 1.0
-     */
-    int removeAll();
-
-    /**
      * Returns the number of pending requests.
      *
      * @return the number of pending requests
@@ -84,11 +58,11 @@ public interface Batcher<K, V> extends AutoCloseable {
     void close();
 
     /**
-     * A builder for configuring a {@link Batcher}.
+     * A builder for configuring {@link Batcher} instances.
      *
      * @since 1.0
      */
-    interface Builder<K, V> {
+    interface Builder<K, V, R extends Batcher<K, V>> {
 
         /**
          * Sets the listener for completed requests.
@@ -97,7 +71,7 @@ public interface Batcher<K, V> extends AutoCloseable {
          * @return this builder
          * @since 1.0
          */
-        Builder<K, V> completionListener(@Nullable BatchCompletionListener<K, V> onListener);
+        Builder<K, V, R> completionListener(@Nullable BatchCompletionListener<K, V> onListener);
 
         /**
          * Sets the flush policy.
@@ -106,7 +80,7 @@ public interface Batcher<K, V> extends AutoCloseable {
          * @return this builder
          * @since 1.0
          */
-        Builder<K, V> flushPolicy(@NotNull BatchFlushPolicy policy);
+        Builder<K, V, R> flushPolicy(@NotNull BatchFlushPolicy policy);
 
         /**
          * Sets the maximum number of requests in a batch.
@@ -115,7 +89,7 @@ public interface Batcher<K, V> extends AutoCloseable {
          * @return this builder
          * @since 1.0
          */
-        Builder<K, V> maxBatchSize(int size);
+        Builder<K, V, R> maxBatchSize(int size);
 
         /**
          * Sets the maximum number of pending requests.
@@ -124,7 +98,7 @@ public interface Batcher<K, V> extends AutoCloseable {
          * @return this builder
          * @since 1.0
          */
-        Builder<K, V> maxPendingRequests(int size);
+        Builder<K, V, R> maxPendingRequests(int size);
 
         /**
          * Sets the maximum number of retries for failed requests.
@@ -133,16 +107,16 @@ public interface Batcher<K, V> extends AutoCloseable {
          * @return this builder
          * @since 1.0
          */
-        Builder<K, V> maxRetries(int retries);
+        Builder<K, V, R> maxRetries(int retries);
 
         /**
          * Creates a batcher using the specified loader.
          *
          * @param onLoader the batch loader
-         * @return a new batcher
+         * @return a new batcher instance
          * @since 1.0
          */
-        Batcher<K, V> build(@NotNull BatchLoader<K, V> onLoader);
+        R build(@NotNull BatchLoader<K, V> onLoader);
 
     }
 }
