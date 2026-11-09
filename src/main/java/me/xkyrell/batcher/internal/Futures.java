@@ -12,6 +12,19 @@ public final class Futures {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
+    public static <V> CompletableFuture<V> view(CompletableFuture<V> source) {
+        CompletableFuture<V> view = new CompletableFuture<>();
+        source.whenComplete((value, error) -> {
+            if (error == null) {
+                view.complete(value);
+            }
+            else {
+                view.completeExceptionally(unwrap(error));
+            }
+        });
+        return view;
+    }
+
     public static <V> CompletableFuture<V> toFuture(CompletionStage<V> stage) {
         if (stage instanceof CompletableFuture<V> future) {
             return future;
