@@ -121,6 +121,7 @@ final class DeduplicatingBatcherImpl<K, V>
             Entry<K, V> existing = indexes.get(key);
             if (existing != null) {
                 if (!existing.getState().isTerminal()) {
+                    WaitSupport.awaitPublication(existing);
                     return Futures.view(existing.getResultFuture());
                 }
 
