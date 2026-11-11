@@ -1,5 +1,6 @@
 package me.xkyrell.batcher;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
@@ -13,6 +14,19 @@ import java.util.concurrent.Executor;
  * @since 1.0
  */
 public interface Batcher<K, V> extends AutoCloseable {
+
+    /**
+     * Creates a new simple batcher builder.
+     *
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return a new batcher builder
+     * @since 1.0
+     */
+    @Contract(value = " -> new", pure = true)
+    static <K, V> Batcher.Builder<K, V, Batcher<K, V>> builder() {
+        return new BatcherImpl.BuilderImpl<>();
+    }
 
     /**
      * Add a request for the specified key.

@@ -1,8 +1,23 @@
 package me.xkyrell.batcher;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public interface DeduplicatingBatcher<K, V> extends Batcher<K, V> {
+
+    /**
+     * Creates a new batcher builder with request deduplication by key
+     * and support for managing pending requests.
+     *
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return a new batcher builder
+     * @since 1.0
+     */
+    @Contract(value = " -> new", pure = true)
+    static <K, V> Builder<K, V, DeduplicatingBatcher<K, V>> builder() {
+        return new DeduplicatingBatcherImpl.BuilderImpl<>();
+    }
 
     /**
      * Checks whether a request for the specified key is pending.
