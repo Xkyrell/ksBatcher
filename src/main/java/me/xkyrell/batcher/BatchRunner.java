@@ -173,16 +173,16 @@ final class BatchRunner<K, V> {
 
         private void acceptResults(List<Entry<K, V>> entries, Map<K, V> values) {
             for (Entry<K, V> entry : entries) {
-                if (entry.getState() == Entry.State.RUNNING) {
+                if (entry.getState() != Entry.State.RUNNING) {
                     continue;
                 }
 
                 if (values.containsKey(entry.getKey())) {
                     onHandler.accept(entry, values.get(entry.getKey()), null);
-                    return;
                 }
-
-                onHandler.accept(entry, null, new KeyNotLoadedException(entry.getKey()));
+                else {
+                    onHandler.accept(entry, null, new KeyNotLoadedException(entry.getKey()));
+                }
             }
         }
 
