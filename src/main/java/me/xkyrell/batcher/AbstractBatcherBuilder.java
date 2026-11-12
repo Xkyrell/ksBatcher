@@ -10,7 +10,7 @@ abstract class AbstractBatcherBuilder<K, V, R extends Batcher<K, V>>
     private static final BatchFlushPolicy DEFAULT_FLUSH_POLICY = BatchFlushPolicy.LAZY;
     private static final int DEFAULT_MAX_BATCH_SIZE = 100;
     private static final int DEFAULT_PENDING_REQUESTS = 0;
-    private static final int DEFAULT_MAX_RETRIES = 1;
+    private static final int DEFAULT_MAX_RETRIES = 0;
 
     private BatchCompletionListener<K, V> onListener;
     private BatchFlushPolicy flushPolicy;
@@ -76,8 +76,8 @@ abstract class AbstractBatcherBuilder<K, V, R extends Batcher<K, V>>
     }
 
     protected final int getMaxRetries() {
-        if (maxRetries <= 0) {
-            throw new IllegalArgumentException("maxRetries must be positive");
+        if (maxRetries < 0) {
+            throw new IllegalArgumentException("maxRetries must be negative");
         }
         return maxRetries;
     }
