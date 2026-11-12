@@ -33,7 +33,7 @@ final class BatcherImpl<K, V> extends AbstractBatcher<K, V> {
 
         for (Entry<K, V> entry : prepareEntries()) {
             if (untrack(entry)) {
-                entry.completeExceptionally(closed());
+                entry.completeExceptionally(requestRemoved());
                 handleListener(entry.getKey(), null, TERMINATED);
             }
         }
